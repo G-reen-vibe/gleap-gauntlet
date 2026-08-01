@@ -1,0 +1,494 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/arena.gd" id="1_arena"]
+[ext_resource type="Script" path="res://scripts/backdrop.gd" id="2_backdrop"]
+[ext_resource type="Script" path="res://scripts/cake.gd" id="3_cake"]
+[ext_resource type="Script" path="res://scripts/tower.gd" id="4_tower"]
+[ext_resource type="Script" path="res://scripts/camera_director.gd" id="5_cam"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="6_hud"]
+[ext_resource type="PackedScene" path="res://scenes/gleap.tscn" id="7_gleap"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kill"]
+size = Vector2(4400, 300)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cake"]
+radius = 80.0
+
+[node name="Arena" type="Node2D" groups=["arena"]]
+script = ExtResource("1_arena")
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("2_backdrop")
+
+[node name="TerrainSkin" type="Node2D" parent="."]
+z_index = -2
+
+[node name="Skin00_plinth" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.204, 0.231, 0.318, 1)
+polygon = PackedVector2Array(20, 700, 300, 700, 300, 900, 20, 900)
+
+[node name="Cap00_plinth" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.376, 0.427, 0.541, 1)
+polygon = PackedVector2Array(20, 700, 300, 700, 300, 707, 20, 707)
+
+[node name="Skin01_ground_a" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(300, 700, 520, 700, 520, 900, 300, 900)
+
+[node name="Cap01_ground_a" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(300, 700, 520, 700, 520, 707, 300, 707)
+
+[node name="Skin02_ramp" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(520, 700, 660, 610, 660, 900, 520, 900)
+
+[node name="Cap02_ramp" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(520, 700, 660, 610, 660, 617, 520, 707)
+
+[node name="Skin03_ledge_a" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(660, 610, 780, 610, 780, 900, 660, 900)
+
+[node name="Cap03_ledge_a" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(660, 610, 780, 610, 780, 617, 660, 617)
+
+[node name="Skin04_ground_b" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(960, 700, 1180, 700, 1180, 900, 960, 900)
+
+[node name="Cap04_ground_b" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(960, 700, 1180, 700, 1180, 707, 960, 707)
+
+[node name="Skin05_gate_nub" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.231, 0.176, 0.251, 1)
+polygon = PackedVector2Array(1130, 560, 1180, 560, 1180, 600, 1130, 600)
+
+[node name="Cap05_gate_nub" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.451, 0.318, 0.412, 1)
+polygon = PackedVector2Array(1130, 560, 1180, 560, 1180, 567, 1130, 567)
+
+[node name="Skin06_gate_wall" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.231, 0.176, 0.251, 1)
+polygon = PackedVector2Array(1180, 410, 1250, 410, 1250, 900, 1180, 900)
+
+[node name="Cap06_gate_wall" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.451, 0.318, 0.412, 1)
+polygon = PackedVector2Array(1180, 410, 1250, 410, 1250, 417, 1180, 417)
+
+[node name="Skin07_trench" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(1250, 700, 1470, 700, 1470, 900, 1250, 900)
+
+[node name="Cap07_trench" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(1250, 700, 1470, 700, 1470, 707, 1250, 707)
+
+[node name="Skin08_overhang" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.231, 0.176, 0.251, 1)
+polygon = PackedVector2Array(1250, 300, 1500, 300, 1500, 360, 1250, 360)
+
+[node name="Cap08_overhang" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.451, 0.318, 0.412, 1)
+polygon = PackedVector2Array(1250, 300, 1500, 300, 1500, 307, 1250, 307)
+
+[node name="Skin09_step_1" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(1300, 620, 1370, 620, 1370, 660, 1300, 660)
+
+[node name="Cap09_step_1" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(1300, 620, 1370, 620, 1370, 627, 1300, 627)
+
+[node name="Skin10_step_2" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(1390, 545, 1460, 545, 1460, 585, 1390, 585)
+
+[node name="Cap10_step_2" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(1390, 545, 1460, 545, 1460, 552, 1390, 552)
+
+[node name="Skin11_step_3" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(1480, 470, 1550, 470, 1550, 510, 1480, 510)
+
+[node name="Cap11_step_3" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(1480, 470, 1550, 470, 1550, 477, 1480, 477)
+
+[node name="Skin12_plateau" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(1560, 400, 1660, 400, 1660, 900, 1560, 900)
+
+[node name="Cap12_plateau" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(1560, 400, 1660, 400, 1660, 407, 1560, 407)
+
+[node name="Skin13_bound" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.098, 0.11, 0.161, 1)
+polygon = PackedVector2Array(-60, -600, 0, -600, 0, 950, -60, 950)
+
+[node name="Skin14_plinth_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.204, 0.231, 0.318, 1)
+polygon = PackedVector2Array(3580, 900, 3300, 900, 3300, 700, 3580, 700)
+
+[node name="Cap14_plinth_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.376, 0.427, 0.541, 1)
+polygon = PackedVector2Array(3580, 707, 3300, 707, 3300, 700, 3580, 700)
+
+[node name="Skin15_ground_a_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(3300, 900, 3080, 900, 3080, 700, 3300, 700)
+
+[node name="Cap15_ground_a_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(3300, 707, 3080, 707, 3080, 700, 3300, 700)
+
+[node name="Skin16_ramp_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(3080, 900, 2940, 900, 2940, 610, 3080, 700)
+
+[node name="Cap16_ramp_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(3080, 707, 2940, 617, 2940, 610, 3080, 700)
+
+[node name="Skin17_ledge_a_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(2940, 900, 2820, 900, 2820, 610, 2940, 610)
+
+[node name="Cap17_ledge_a_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(2940, 617, 2820, 617, 2820, 610, 2940, 610)
+
+[node name="Skin18_ground_b_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(2640, 900, 2420, 900, 2420, 700, 2640, 700)
+
+[node name="Cap18_ground_b_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(2640, 707, 2420, 707, 2420, 700, 2640, 700)
+
+[node name="Skin19_gate_nub_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.231, 0.176, 0.251, 1)
+polygon = PackedVector2Array(2470, 600, 2420, 600, 2420, 560, 2470, 560)
+
+[node name="Cap19_gate_nub_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.451, 0.318, 0.412, 1)
+polygon = PackedVector2Array(2470, 567, 2420, 567, 2420, 560, 2470, 560)
+
+[node name="Skin20_gate_wall_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.231, 0.176, 0.251, 1)
+polygon = PackedVector2Array(2420, 900, 2350, 900, 2350, 410, 2420, 410)
+
+[node name="Cap20_gate_wall_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.451, 0.318, 0.412, 1)
+polygon = PackedVector2Array(2420, 417, 2350, 417, 2350, 410, 2420, 410)
+
+[node name="Skin21_trench_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(2350, 900, 2130, 900, 2130, 700, 2350, 700)
+
+[node name="Cap21_trench_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(2350, 707, 2130, 707, 2130, 700, 2350, 700)
+
+[node name="Skin22_overhang_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.231, 0.176, 0.251, 1)
+polygon = PackedVector2Array(2350, 360, 2100, 360, 2100, 300, 2350, 300)
+
+[node name="Cap22_overhang_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.451, 0.318, 0.412, 1)
+polygon = PackedVector2Array(2350, 307, 2100, 307, 2100, 300, 2350, 300)
+
+[node name="Skin23_step_1_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(2300, 660, 2230, 660, 2230, 620, 2300, 620)
+
+[node name="Cap23_step_1_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(2300, 627, 2230, 627, 2230, 620, 2300, 620)
+
+[node name="Skin24_step_2_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(2210, 585, 2140, 585, 2140, 545, 2210, 545)
+
+[node name="Cap24_step_2_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(2210, 552, 2140, 552, 2140, 545, 2210, 545)
+
+[node name="Skin25_step_3_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(2120, 510, 2050, 510, 2050, 470, 2120, 470)
+
+[node name="Cap25_step_3_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(2120, 477, 2050, 477, 2050, 470, 2120, 470)
+
+[node name="Skin26_plateau_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.168, 0.192, 0.271, 1)
+polygon = PackedVector2Array(2040, 900, 1940, 900, 1940, 400, 2040, 400)
+
+[node name="Cap26_plateau_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.298, 0.349, 0.463, 1)
+polygon = PackedVector2Array(2040, 407, 1940, 407, 1940, 400, 2040, 400)
+
+[node name="Skin27_bound_r" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.098, 0.11, 0.161, 1)
+polygon = PackedVector2Array(3660, 950, 3600, 950, 3600, -600, 3660, -600)
+
+[node name="Skin28_mesa_stem" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.243, 0.212, 0.302, 1)
+polygon = PackedVector2Array(1770, 240, 1830, 240, 1830, 900, 1770, 900)
+
+[node name="Cap28_mesa_stem" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.588, 0.478, 0.318, 1)
+polygon = PackedVector2Array(1770, 240, 1830, 240, 1830, 247, 1770, 247)
+
+[node name="Skin29_mesa_cap" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.243, 0.212, 0.302, 1)
+polygon = PackedVector2Array(1720, 200, 1880, 200, 1880, 240, 1720, 240)
+
+[node name="Cap29_mesa_cap" type="Polygon2D" parent="TerrainSkin"]
+color = Color(0.588, 0.478, 0.318, 1)
+polygon = PackedVector2Array(1720, 200, 1880, 200, 1880, 207, 1720, 207)
+
+[node name="Terrain" type="StaticBody2D" parent="." groups=["terrain"]]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Col00_plinth" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(20, 700, 300, 700, 300, 900, 20, 900)
+
+[node name="Col01_ground_a" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(300, 700, 520, 700, 520, 900, 300, 900)
+
+[node name="Col02_ramp" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(520, 700, 660, 610, 660, 900, 520, 900)
+
+[node name="Col03_ledge_a" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(660, 610, 780, 610, 780, 900, 660, 900)
+
+[node name="Col04_ground_b" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(960, 700, 1180, 700, 1180, 900, 960, 900)
+
+[node name="Col05_gate_nub" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1130, 560, 1180, 560, 1180, 600, 1130, 600)
+
+[node name="Col06_gate_wall" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1180, 410, 1250, 410, 1250, 900, 1180, 900)
+
+[node name="Col07_trench" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1250, 700, 1470, 700, 1470, 900, 1250, 900)
+
+[node name="Col08_overhang" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1250, 300, 1500, 300, 1500, 360, 1250, 360)
+
+[node name="Col09_step_1" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1300, 620, 1370, 620, 1370, 660, 1300, 660)
+
+[node name="Col10_step_2" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1390, 545, 1460, 545, 1460, 585, 1390, 585)
+
+[node name="Col11_step_3" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1480, 470, 1550, 470, 1550, 510, 1480, 510)
+
+[node name="Col12_plateau" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1560, 400, 1660, 400, 1660, 900, 1560, 900)
+
+[node name="Col13_bound" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(-60, -600, 0, -600, 0, 950, -60, 950)
+
+[node name="Col14_plinth_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(3580, 900, 3300, 900, 3300, 700, 3580, 700)
+
+[node name="Col15_ground_a_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(3300, 900, 3080, 900, 3080, 700, 3300, 700)
+
+[node name="Col16_ramp_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(3080, 900, 2940, 900, 2940, 610, 3080, 700)
+
+[node name="Col17_ledge_a_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2940, 900, 2820, 900, 2820, 610, 2940, 610)
+
+[node name="Col18_ground_b_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2640, 900, 2420, 900, 2420, 700, 2640, 700)
+
+[node name="Col19_gate_nub_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2470, 600, 2420, 600, 2420, 560, 2470, 560)
+
+[node name="Col20_gate_wall_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2420, 900, 2350, 900, 2350, 410, 2420, 410)
+
+[node name="Col21_trench_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2350, 900, 2130, 900, 2130, 700, 2350, 700)
+
+[node name="Col22_overhang_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2350, 360, 2100, 360, 2100, 300, 2350, 300)
+
+[node name="Col23_step_1_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2300, 660, 2230, 660, 2230, 620, 2300, 620)
+
+[node name="Col24_step_2_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2210, 585, 2140, 585, 2140, 545, 2210, 545)
+
+[node name="Col25_step_3_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2120, 510, 2050, 510, 2050, 470, 2120, 470)
+
+[node name="Col26_plateau_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(2040, 900, 1940, 900, 1940, 400, 2040, 400)
+
+[node name="Col27_bound_r" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(3660, 950, 3600, 950, 3600, -600, 3660, -600)
+
+[node name="Col28_mesa_stem" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1770, 240, 1830, 240, 1830, 900, 1770, 900)
+
+[node name="Col29_mesa_cap" type="CollisionPolygon2D" parent="Terrain"]
+polygon = PackedVector2Array(1720, 200, 1880, 200, 1880, 240, 1720, 240)
+
+[node name="KillZone" type="Area2D" parent="."]
+position = Vector2(1800, 1100)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+shape = SubResource("RectangleShape2D_kill")
+
+[node name="Cake" type="Area2D" parent="."]
+position = Vector2(1800, 190)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_cake")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cake"]
+position = Vector2(0, -18)
+shape = SubResource("CircleShape2D_cake")
+
+[node name="TowerLeft" type="Node2D" parent="."]
+position = Vector2(170, 700)
+script = ExtResource("4_tower")
+team = 0
+gleap_scene = ExtResource("7_gleap")
+spawn_offset = Vector2(46, -26)
+rng_seed = 20260801
+
+[node name="TowerRight" type="Node2D" parent="."]
+position = Vector2(3430, 700)
+script = ExtResource("4_tower")
+team = 1
+gleap_scene = ExtResource("7_gleap")
+spawn_offset = Vector2(46, -26)
+rng_seed = 913377
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1800, 380)
+zoom = Vector2(0.4, 0.4)
+script = ExtResource("5_cam")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Screen" type="Control" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_hud")
+
+[node name="LeftPanel" type="Label" parent="HUD/Screen"]
+offset_left = 18.0
+offset_top = 84.0
+offset_right = 440.0
+offset_bottom = 300.0
+mouse_filter = 2
+horizontal_alignment = 0
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.86, 0.89, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 0.85)
+theme_override_constants/outline_size = 5
+
+[node name="RightPanel" type="Label" parent="HUD/Screen"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -440.0
+offset_top = 84.0
+offset_right = -18.0
+offset_bottom = 300.0
+grow_horizontal = 0
+mouse_filter = 2
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.86, 0.89, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 0.85)
+theme_override_constants/outline_size = 5
+
+[node name="Banner" type="Label" parent="HUD/Screen"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -360.0
+offset_top = 14.0
+offset_right = 360.0
+offset_bottom = 52.0
+grow_horizontal = 2
+mouse_filter = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.86, 0.89, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 0.85)
+theme_override_constants/outline_size = 5
+
+[node name="SubBanner" type="Label" parent="HUD/Screen"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -360.0
+offset_top = 50.0
+offset_right = 360.0
+offset_bottom = 74.0
+grow_horizontal = 2
+mouse_filter = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.68, 0.72, 0.86, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 0.85)
+theme_override_constants/outline_size = 5
+
+[node name="Toast" type="Label" parent="HUD/Screen"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -162.0
+offset_right = 500.0
+offset_bottom = -136.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(1, 0.87, 0.55, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 0.85)
+theme_override_constants/outline_size = 5
+
+[node name="Help" type="Label" parent="HUD/Screen"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -32.0
+offset_right = 1100.0
+offset_bottom = -8.0
+grow_vertical = 0
+mouse_filter = 2
+horizontal_alignment = 0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.65, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 0.85)
+theme_override_constants/outline_size = 5
+

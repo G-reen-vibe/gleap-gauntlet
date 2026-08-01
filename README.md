@@ -32,9 +32,11 @@ Every metre it covers comes from the same four-part cycle Starbound's gleaps use
 4. **Land** — it splats, keeps `LAND_KEEP` of its horizontal momentum, and if it
    hit hard and its `bounce` gene is high it keeps hopping ball-style.
 
-Plus a wall grip: a gleap that touches a wall can latch on, slide slowly, burn
-stamina, and fire a wall-leap away from it. That is the only reliable way early
-generations get over the 300px gate wall.
+Plus a wall grip: a gleap that touches a wall can latch on, slide slowly and burn
+stamina, then fire a wall-leap off it. The direction of that leap is the brain's
+choice — aim away from the wall and it kicks off hard, aim *back into* the wall and
+almost all the spring goes into height, which is how a lineage ladders its way up a
+face too tall to clear in one go.
 
 **None of that self-triggers.** `scripts/gleap.gd` implements the whole state
 machine, but the crouch, the aim, the release, the mid-air lean and the wall grab
@@ -87,9 +89,14 @@ unit is bought, the queue keeps rolling.
 `scripts/tower.gd`. Each tower runs its own genetic algorithm over a population of
 12 genomes:
 
-- every genome is fielded `EVALS_PER_GENOME` times per generation, in shuffled order;
-- a run scores `distance closed on the cake + climb bonus + 2500 for arriving
-  − 2/second − 180 for falling down a hole`;
+- every genome is fielded `EVALS_PER_GENOME` times per generation, in shuffled order
+  (once by default — the gauntlet is deterministic apart from a few pixels of spawn
+  jitter, so a second identical run buys nothing and halves the generation rate);
+- a run scores `0.5 × ground covered toward the centre + 0.6 × distance closed on
+  the cake + climb bonus + 2500 for arriving − 2/second − 180 for falling down a
+  hole`. The blend matters: pure distance-to-cake has a dead zone where dropping off
+  the gate wall into the trench makes the number *worse*, and a population that only
+  saw that metric would learn to sit on top of the wall and admire the view;
 - once all of them have reported, the top 3 survive untouched and the rest are
   bred by 3-way tournament selection, uniform crossover on the weights and blend
   crossover on the body, then mutated;
@@ -99,10 +106,10 @@ unit is bought, the queue keeps rolling.
 The two towers evolve **independently and in parallel** — they are two separate
 populations racing each other, with different RNG seeds.
 
-Expect nothing for the first minute. Generation 1 is 24 random brains and most of
-them fall in the first hole. Somewhere around generation 3–6 you start seeing
-deliberate charged leaps, then wall grabs on the gate, then a lineage that runs
-the staircase cleanly.
+Expect nothing much for the first minute. Generation 1 is twelve random brains and
+most of them faceplant into the first hole. Deliberate charged leaps show up first,
+then wall grabs on the gate, then a lineage that runs the staircase cleanly. Press
+`F` to run at ×4 if you would rather not wait in real time.
 
 ---
 
@@ -111,14 +118,14 @@ the staircase cleanly.
 Symmetric about the centre, 3600px wide, drawn from `scenes/main.tscn`:
 
 ```
-tower ─ ramp ─ [HOLE] ─ run-up ─ ██ 300px GATE WALL ██ ─ trench under a low ceiling
+tower ─ ramp ─ [HOLE] ─ run-up ─ ██ 290px GATE WALL ██ ─ trench under a low ceiling
         ─ floating staircase over [HOLE 2] ─ plateau ─ [CHASM] ─ 🎂 mushroom mesa
 ```
 
 - **Hole 1** and **Hole 2** drop straight past the death plane at `y=950`.
-- The **gate wall** is 300px — right at the theoretical ceiling of a full-charge
-  leap, so most lineages solve it with the wall grip first and only later evolve
-  the body power to clear it outright.
+- The **gate wall** is 290px — around the theoretical ceiling of a full-charge leap
+  for a baseline body, so a lineage either evolves the raw power to arc over it or
+  learns to use the foothold nub and the wall grip to climb it.
 - The **overhang** forces a flat trajectory out of the gate; you cannot just
   moon-shot the whole middle section.
 - The staircase floats *over* hole 2, so a missed step is fatal.
@@ -192,4 +199,14 @@ godot --headless --path . --quit-after 60000
 
 `closest` is the nearest any of that tower's creatures has ever come to the cake,
 in pixels — the most honest single measure of whether a population is learning.
+
+### Screenshots
+
+`F12` saves the frame to `user://gauntlet.png`. For an unattended capture:
+
+```
+godot --path . -- --shot=45 --shot-out=/tmp/gauntlet.png --speed=4
+```
+
+`--shot` is in simulated seconds; `--speed` takes 1, 2 or 4.
 # gleap-gauntlet

@@ -1,0 +1,5 @@
+# Godot's import/type cache — regenerated on first open.
+.godot/
+# Exported builds
+build/
+*.tmp
