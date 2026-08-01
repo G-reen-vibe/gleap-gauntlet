@@ -97,7 +97,8 @@ unit is bought, the queue keeps rolling.
   hole`. The blend matters: pure distance-to-cake has a dead zone where dropping off
   the gate wall into the trench makes the number *worse*, and a population that only
   saw that metric would learn to sit on top of the wall and admire the view;
-- once all of them have reported, the top 3 survive untouched and the rest are
+- once all of them have reported, the top 3 carry over genetically untouched (but
+  are re-scored, so a lucky elite cannot squat in the population) and the rest are
   bred by 3-way tournament selection, uniform crossover on the weights and blend
   crossover on the body, then mutated;
 - if the best score stops improving, mutation strength ramps up to 2.6× to shake
@@ -108,8 +109,28 @@ populations racing each other, with different RNG seeds.
 
 Expect nothing much for the first minute. Generation 1 is twelve random brains and
 most of them faceplant into the first hole. Deliberate charged leaps show up first,
-then wall grabs on the gate, then a lineage that runs the staircase cleanly. Press
-`F` to run at ×4 if you would rather not wait in real time.
+then wall grabs on the gate, then a lineage that runs the staircase cleanly, and
+the mesa leap last of all. Press `F` to run at ×4 if you would rather not wait in
+real time.
+
+A representative headless run on the shipped defaults — the number is `closest`,
+how near that tower's best creature has come to the cake, in pixels:
+
+| generation | AZURE | EMBER |
+|---|---|---|
+| 1 | 1022 | 1633 |
+| 2 | 1017 | 412 |
+| 4 | 718 | 412 |
+| 6 | 669 | 278 |
+| 7 | 665 | 211 |
+| 11 | 409 | 160 |
+| 15 | 267 | **reached the cake** |
+
+EMBER solved the whole gauntlet on its 175th creature, about 7½ simulated minutes
+in, for a run score of 4205. Roughly 25 simulated seconds per generation, and the
+two towers diverge hard —
+they are separate searches with separate seeds, so one tower routinely cracks an
+obstacle several generations before the other. That asymmetry is the race.
 
 ---
 
@@ -130,7 +151,9 @@ tower ─ ramp ─ [HOLE] ─ run-up ─ ██ 290px GATE WALL ██ ─ trenc
   moon-shot the whole middle section.
 - The staircase floats *over* hole 2, so a missed step is fatal.
 - The mesa is mushroom-shaped: the final leap from the plateau has to clear an
-  overhanging lip, not just gain height.
+  overhanging lip, not just gain height, and a full-power leap *overshoots* the
+  cap into the far chasm. Landing it means a partial charge at the right aim —
+  the hardest single thing in the course, and the last thing a lineage learns.
 
 ---
 
@@ -198,15 +221,20 @@ godot --headless --path . --quit-after 60000
 ```
 
 `closest` is the nearest any of that tower's creatures has ever come to the cake,
-in pixels — the most honest single measure of whether a population is learning.
+in pixels — the most honest single measure of whether a population is learning. A
+win is announced too, and headless runs auto-rematch six seconds later so a long
+training session does not stall the first time somebody gets there. Pass
+`--rematch=0` to disable that, or `--rematch=N` in a windowed run to make matches
+restart by themselves.
 
 ### Screenshots
 
 `F12` saves the frame to `user://gauntlet.png`. For an unattended capture:
 
 ```
-godot --path . -- --shot=45 --shot-out=/tmp/gauntlet.png --speed=4
+godot --path . -- --shot=45 --shot-out=/tmp/gauntlet.png --speed=4 --cam=leader
 ```
 
-`--shot` is in simulated seconds; `--speed` takes 1, 2 or 4.
+`--shot` is in simulated seconds, `--speed` takes 1, 2 or 4, and `--cam` takes
+`leader`, `overview` or `free`.
 # gleap-gauntlet

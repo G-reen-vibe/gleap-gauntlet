@@ -29,6 +29,11 @@ var _headless := false
 var _shot_at := -1.0
 var _shot_path := "user://gauntlet.png"
 var _shot_taken := false
+## Seconds to linger on a win before starting the next match by itself. Off for a
+## human at the keyboard (they press R); on when headless, or a training run would
+## stall forever the first time somebody reaches the cake.
+var _rematch_delay := -1.0
+var _rematch_t := 0.0
 
 
 func _ready() -> void:
@@ -40,6 +45,8 @@ func _ready() -> void:
 	# would show. Handy for long unattended training runs:
 	#   godot --headless --quit-after 20000
 	_headless = DisplayServer.get_name() == "headless"
+	if _headless:
+		_rematch_delay = 6.0
 	_parse_cmdline()
 	_toast("Gleap Gauntlet — brains start at random. Give them a few generations.")
 
@@ -52,6 +59,13 @@ func _parse_cmdline() -> void:
 			_shot_at = float(a.substr(7))
 		elif a.begins_with("--shot-out="):
 			_shot_path = a.substr(11)
+		elif a.begins_with("--cam="):
+			var names: Array = ["leader", "overview", "free"]
+			var want_cam := names.find(a.substr(6))
+			if want_cam >= 0:
+				cam.set("mode", want_cam)
+		elif a.begins_with("--rematch="):
+			_rematch_delay = float(a.substr(10))   # 0 or less disables
 		elif a.begins_with("--speed="):
 			var want := float(a.substr(8))
 			for i in range(TIME_SCALES.size()):
@@ -79,6 +93,11 @@ func _process(delta: float) -> void:
 	if winner < 0:
 		match_time += delta
 	toast_t = maxf(toast_t - delta / maxf(Engine.time_scale, 0.001), 0.0)
+	if winner >= 0 and _rematch_delay > 0.0:
+		_rematch_t += delta
+		if _rematch_t >= _rematch_delay:
+			_rematch_t = 0.0
+			reset_match(false)
 	if _shot_at > 0.0 and match_time >= _shot_at and not _shot_taken:
 		_capture(true)
 	if _headless:
@@ -112,6 +131,10 @@ func _on_cake_claimed(team: int, _g: Node) -> void:
 	wins[team] += 1
 	_toast("%s reaches the cake! Press R for the next match — the brains carry over." \
 		% Balance.team_name(team))
+	if _headless:
+		print("*** %s CLAIMS THE CAKE at t=%.1fs — score %d-%d" % [
+			Balance.team_name(team), match_time, wins[0], wins[1]])
+		_print_status()
 	match_ended.emit(team)
 
 
@@ -133,6 +156,7 @@ func reset_match(hard: bool = false) -> void:
 	cake.claimed_by = -1
 	winner = -1
 	match_time = 0.0
+	_rematch_t = 0.0
 	match_index += 1
 	_toast("Match %d. Populations kept — generation %d vs %d." \
 		% [match_index, tower_left.generation, tower_right.generation])

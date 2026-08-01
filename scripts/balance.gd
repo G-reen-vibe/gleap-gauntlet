@@ -12,7 +12,7 @@ const ARENA_BOTTOM := 1080.0
 const CENTRE_X := 1800.0
 
 ## Where the cake sits. Must match the Cake node position in main.tscn.
-const CAKE_POS := Vector2(1800.0, 190.0)
+const CAKE_POS := Vector2(1800.0, 205.0)
 
 ## Anything that falls past this dies.
 const DEATH_Y := 950.0

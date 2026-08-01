@@ -12,7 +12,7 @@
 size = Vector2(4400, 300)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cake"]
-radius = 80.0
+radius = 95.0
 
 [node name="Arena" type="Node2D" groups=["arena"]]
 script = ExtResource("1_arena")
@@ -241,19 +241,19 @@ polygon = PackedVector2Array(3660, 950, 3600, 950, 3600, -600, 3660, -600)
 
 [node name="Skin28_mesa_stem" type="Polygon2D" parent="TerrainSkin"]
 color = Color(0.243, 0.212, 0.302, 1)
-polygon = PackedVector2Array(1770, 240, 1830, 240, 1830, 900, 1770, 900)
+polygon = PackedVector2Array(1765, 255, 1835, 255, 1835, 900, 1765, 900)
 
 [node name="Cap28_mesa_stem" type="Polygon2D" parent="TerrainSkin"]
 color = Color(0.588, 0.478, 0.318, 1)
-polygon = PackedVector2Array(1770, 240, 1830, 240, 1830, 247, 1770, 247)
+polygon = PackedVector2Array(1765, 255, 1835, 255, 1835, 262, 1765, 262)
 
 [node name="Skin29_mesa_cap" type="Polygon2D" parent="TerrainSkin"]
 color = Color(0.243, 0.212, 0.302, 1)
-polygon = PackedVector2Array(1720, 200, 1880, 200, 1880, 240, 1720, 240)
+polygon = PackedVector2Array(1700, 215, 1900, 215, 1900, 255, 1700, 255)
 
 [node name="Cap29_mesa_cap" type="Polygon2D" parent="TerrainSkin"]
 color = Color(0.588, 0.478, 0.318, 1)
-polygon = PackedVector2Array(1720, 200, 1880, 200, 1880, 207, 1720, 207)
+polygon = PackedVector2Array(1700, 215, 1900, 215, 1900, 222, 1700, 222)
 
 [node name="Terrain" type="StaticBody2D" parent="." groups=["terrain"]]
 collision_layer = 1
@@ -344,10 +344,10 @@ polygon = PackedVector2Array(2040, 900, 1940, 900, 1940, 400, 2040, 400)
 polygon = PackedVector2Array(3660, 950, 3600, 950, 3600, -600, 3660, -600)
 
 [node name="Col28_mesa_stem" type="CollisionPolygon2D" parent="Terrain"]
-polygon = PackedVector2Array(1770, 240, 1830, 240, 1830, 900, 1770, 900)
+polygon = PackedVector2Array(1765, 255, 1835, 255, 1835, 900, 1765, 900)
 
 [node name="Col29_mesa_cap" type="CollisionPolygon2D" parent="Terrain"]
-polygon = PackedVector2Array(1720, 200, 1880, 200, 1880, 240, 1720, 240)
+polygon = PackedVector2Array(1700, 215, 1900, 215, 1900, 255, 1700, 255)
 
 [node name="KillZone" type="Area2D" parent="."]
 position = Vector2(1800, 1100)
@@ -359,14 +359,14 @@ monitorable = false
 shape = SubResource("RectangleShape2D_kill")
 
 [node name="Cake" type="Area2D" parent="."]
-position = Vector2(1800, 190)
+position = Vector2(1800, 205)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("3_cake")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Cake"]
-position = Vector2(0, -18)
+position = Vector2(0, -14)
 shape = SubResource("CircleShape2D_cake")
 
 [node name="TowerLeft" type="Node2D" parent="."]

@@ -142,7 +142,9 @@ func clear_creatures() -> void:
 func _fill_queue() -> void:
 	_queue.clear()
 	for i in range(population.size()):
-		# Elites carried over with their scores intact do not need re-running.
+		# Queue whatever each genome still owes. Elites come through _evolve() with
+		# their scores cleared on purpose: fitness is noisy under spawn jitter, and
+		# an elite that keeps a lucky score would squat in the population forever.
 		for _r in range(Balance.EVALS_PER_GENOME - population[i].scores.size()):
 			_queue.append(i)
 	# Shuffle deterministically off this tower's own stream.

@@ -10,7 +10,7 @@ is retuned. Run it from the project root:
 
 Coordinates are Godot 2D world space: +x right, +y down. Ground level is y=700,
 anything that falls past y=950 dies, and the cake sits on the central mesa at
-(1800, 190).
+(1800, 205).
 """
 
 from pathlib import Path
@@ -89,8 +89,8 @@ LEFT = [
 # Shared centrepiece: a mushroom-capped mesa. The overhanging cap means the final
 # leap from the plateau has to clear a lip, not just gain height.
 CENTREPIECE = [
-    rect("mesa_stem", "mesa", 1770, 240, 1830, 900),
-    rect("mesa_cap", "mesa", 1720, 200, 1880, 240),
+    rect("mesa_stem", "mesa", 1765, 255, 1835, 900),
+    rect("mesa_cap", "mesa", 1700, 215, 1900, 255),
 ]
 
 SHAPES = LEFT + [mirror(s) for s in LEFT] + CENTREPIECE
@@ -131,8 +131,9 @@ def build():
     w('[sub_resource type="CircleShape2D" id="CircleShape2D_cake"]')
     # Wide enough that landing anywhere on the mesa cap counts as reaching the
     # cake — the mesa top *is* the goal, and a gleap that sticks the final leap
-    # should not lose on a technicality of where its feet ended up.
-    w("radius = 80.0")
+    # should not lose on a technicality of where its feet ended up. It stops short
+    # of the chasm on either side, so falling past the lip is still a death.
+    w("radius = 95.0")
     w("")
 
     # ---------------------------------------------------------------- root
@@ -181,14 +182,14 @@ def build():
     w("")
 
     w('[node name="Cake" type="Area2D" parent="."]')
-    w("position = Vector2(1800, 190)")
+    w("position = Vector2(1800, 205)")
     w("collision_layer = 0")
     w("collision_mask = 2")
     w("monitorable = false")
     w('script = ExtResource("3_cake")')
     w("")
     w('[node name="CollisionShape2D" type="CollisionShape2D" parent="Cake"]')
-    w("position = Vector2(0, -18)")
+    w("position = Vector2(0, -14)")
     w('shape = SubResource("CircleShape2D_cake")')
     w("")
 
